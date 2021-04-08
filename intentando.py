@@ -34,7 +34,7 @@ pruebaGDB = arcpy.CreateFileGDB_management(
 
 # Absolute Workspace
 # Where you store all the stuff for this project
-root_path = r"C:\script\"
+root_path = r"C:\script\\"
 # Config de Destino
 destino_dir = r"C:\script\workspace"
 destino_dbname = "datos_finales.gdb"

@@ -1,5 +1,6 @@
 
 import arcpy
+import os
 
 ruta_precipitaciones = r"C:\script\climatologia\precipitaciones.gdb"
 arcpy.env.workspace = ruta_precipitaciones

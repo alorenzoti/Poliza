@@ -8,6 +8,8 @@ from arcpy.sa import ExtractByMask
 from arcpy.sa import *
 import shutil
 
+#from core import 
+from config import *
 
 arcpy.env.overwriteOutput = True
 debug = True
@@ -29,35 +31,8 @@ pruebaGDB = arcpy.CreateFileGDB_management(
 
 
 # Inputs:
-# Falta input cultivo
-################################################################################
-# CONFIG
-################################################################################
-
-# Absolute Workspace
-# Where you store all the stuff for this project
-root_path = r"C:\script\\"
-# Config de Destino
-destino_dir = r"C:\script\workspace"
-destino_dbname = "datos_finales.gdb"
-destino_workspace = r"C:\script\workspace\datos_finales.gdb"
-destino_tablas_ruta = r"C:\script\workspace\tablas"
-
-# Rutas:
-catastro = r"C:\script\catastro\catastrogdb.gdb"
-catastro_capa = r"C:\script\catastro\catastrogdb.gdb\Catastro_murcia"
-precipitaciones = r"C:\script\climatologia\precipitaciones.gdb"
-temperaturasMax = r"C:\script\climatologia\temperaturasMax.gdb"
-temperaturasMin = r"C:\script\climatologia\temperaturasMin.gdb"
-geologia = r"C:\script\datosConstantes\Geologia.gdb"
-geologia_capa = r"C:\script\datosConstantes\Geologia.gdb\litologia"
-hidrologia = r"C:\script\datosConstantes\Hidrologia.gdb"
-hidrologia_capa = r"C:\script\datosConstantes\Hidrologia.gdb\aguaRaster"
-pendiente = r"C:\script\datosConstantes\pendiente.gdb"
-pendiente_capa = r"C:\script\datosConstantes\pendiente.gdb\pendiente"
-
-# Espacio de trabajo precipitaciones
-espacioTrabajo = arcpy.env.workspace = r"C:\script\climatologia\precipitaciones.gdb"
+# TODO: Falta input cultivo
+# Imagino que en las rutas???
 
 ################################################################################
 # Realizacion de meses procedentes de input:
@@ -70,13 +45,22 @@ listameses = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio',
               'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre']
 
 
-def pedirentrada():
-    mesEntrada = input("introduce un mes de inicio de poliza \t")
-    #mesEntrada = arcpy.GetParameterAsText(0)
-    mesSalida = input('introduce un mes de fin de poliza \t')
-    #mesSalida = arcpy.GetParameterAsText(1)
+def pedir_mes(msg):
+    valid = False
+    while not valid:
+        mes = input(msg)
+        valid = mes in listameses
+    return mes
+
+def entrada_periodo_usuario():
+    mesEntrada = pedir_mes("introduce un mes de inicio de poliza \t")
+    mesSalida = pedir_mes('introduce un mes de fin de poliza \t')
     return (mesEntrada, mesSalida)
 
+def entrada_arcpy():
+    mesEntrada = arcpy.GetParameterAsText(0)
+    mesSalida = arcpy.GetParameterAsText(1)
+    return (mesEntrada, mesSalida)
 
 def getperiod(inicio, final):
     """dado inicio y final saca los meses de entre medias"""
@@ -88,21 +72,24 @@ def getperiod(inicio, final):
 assert len(getperiod("enero", "febrero")) == 2
 
 
-def recorrer(mesEntrada, mesSalida):
+def recorrer(geodb_periodo_path, mesEntrada, mesSalida):
     """recorre el periodo y devuelve y copio los datos en la ruta"""
     periodo = getperiod(mesEntrada, mesSalida)
-   # print(f"te vamos a copiar estos datos: {periodo}")
+   # print("te vamos a copiar estos datos: {0}".format(periodo))
     for mes in periodo:
-        #print(f"estoy copiando precipitaciones {mes} ")
+        if debug:
+            print("estoy copiando precipitaciones {mes} ".format(mes=mes))
         arcpy.management.CopyRaster(
-            mes, os.path.join(geodb_periodo_path, mes + "Pre"))
+            mes, os.path.join(, mes + "Pre"))
 
-       # print(f"estoy copiando temperaturas maximas {mes} ")
+        if debug:
+            print("estoy copiando temperaturas maximas {mes} ".format(mes=mes))
         arcpy.env.workspace = r"C:\script\climatologia\temperaturasMax.gdb"
         arcpy.management.CopyRaster(
             mes, os.path.join(geodb_periodo_path, mes + "TMax"))
 
-      #  print(f"estoy copiando temperaturas minimas {mes} ")
+        if debug:
+            print("estoy copiando temperaturas minimas {mes} ".format(mes=mes))
         arcpy.env.workspace = r"C:\script\climatologia\temperaturasMin.gdb"
         arcpy.management.CopyRaster(
             mes, os.path.join(geodb_periodo_path, mes + "TMin"))
@@ -116,7 +103,7 @@ def recorrer(mesEntrada, mesSalida):
 
 
 inicio, final = pedirentrada()  # pide entrada al usuario
-recorrer(inicio, final)
+recorrer(geodb_periodo_path, inicio, final)
 
 # ask users INPUT CATASTRO + SELECT:
 # TODO: extract inputs and add validation. eg: "560014A40027"
@@ -154,8 +141,8 @@ def recortar(lista_capas_gdb, save_path):
     outExtractByMask = ExtractByMask(inRaster, inMaskData)
     outExtractByMask.save(os.path.join(geodb_periodo_path, save_path))
     if debug:
-        print(f"estoy recortando {capa}")
-        print(f"estoy guardando en  {save_path}")
+        print("estoy recortando {0}".format(capa))
+        print("estoy guardando en {0}".format(save_path))
 
 
 def recortar_clima(lista_capas_gdb):
@@ -173,7 +160,8 @@ recortar(geologia_capa, r"geologia_recorte")
 recortar(pendiente_capa, r"pendiente_recorte")
 
 # RECORTAMOS CAPA DE HIDROLOGÍA:
-recortar(hidrologia_capa, r"hidrologia_recorte")
+    recortar(hidrologia_capa, r"hidrologia_recorte")
+
 
 # CREAMOS UNA NUEVA GDB SOLO CON LAS CAPAS DE RECORTE
 lista_recorte = arcpy.ListDatasets("*", "Raster")
@@ -195,17 +183,15 @@ def guardar_periodo(destino_dir,
         if "_recorte" in capa:
             arcpy.env.workspace = geodb_periodo_path
             if debug:
-                print(f"{capa}+esta capa es resultado")
+                print("{capa}+esta capa es resultado".format(capa=capa))
             arcpy.management.CopyRaster(capa, os.path.join(
-                destino_workspace, capa + "_def"))
+                destino_workspace, capa + '_def'))
 
 
 guardar_periodo(destino_dir, destino_dbname, destino_workspace,
                 lista_recorte, geodb_periodo_path)
 
 # TRANSFORMAMOS LOS DATOS A CSV:
-
-
 def transformar_csv(destino_workspace, destino_tablas_ruta):
     """
     Transforma a csv y guarda cada tabla en el workspace
@@ -235,8 +221,6 @@ if debug:
     print(tablas_peligrosidad)
 
 
-# Calculo la media de las columnas Value de los CSVs:
-
 def obtener_medias_peligro(destino_tablas_ruta, tablas_peligrosidad):
     """Se obtiene la media de los distintos mapas de peligrosidad
     """
@@ -252,7 +236,7 @@ def obtener_medias_peligro(destino_tablas_ruta, tablas_peligrosidad):
     return lista_media
 
 
-# MULTIPLICO LOS NÚMERO DE LAS LISTAS [a*b*c]
+# MULTIPLICO LOS NÚMERO DE LAS LISTAS [a*b*c] WHOT
 
 def obtener_total(medias_peligrosidad):
     """
@@ -268,12 +252,13 @@ def obtener_total(medias_peligrosidad):
 
 
 # Numero final de multiplicación entre numero de capas:
+# Calculo la medias de peligrosidad
 medias_peligrosidad = obtener_medias_peligro(destino_tablas_ruta, tablas_peligrosidad)
 longitudlista = len(medias_peligrosidad)
 total_peligro = obtener_total(medias_peligrosidad)
 indice_peligro_parcela = total_peligro/longitudlista
 if debug:
-    print(f"el indice de peligro de la puta parcela es {indice_peligro_parcela}")
+    print("el indice de peligro de la puta parcela es {0}".format(indice_peligro_parcela))
 
 
 # Precios seguros:

@@ -120,9 +120,9 @@ def recoge_meteo(ruta_geodb_trabajo, mesEntrada, mesSalida):
     for mes in periodo:
         if debug:
             print("estoy copiando precipitaciones {mes} ".format(mes=mes))
+            print("en el wkspc {0}".format(ruta_precipitaciones)
         arcpy.env.workspace = ruta_precipitaciones
-        arcpy.management.CopyRaster(
-            mes, os.path.join( mes + "Pre"))
+        arcpy.management.CopyRaster( mes, os.path.join( mes + "Pre"))
 
         if debug:
             print("estoy copiando temperaturas maximas {mes} ".format(mes=mes))

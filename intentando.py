@@ -23,6 +23,9 @@ Notas de desarrollo:
 - Falta input cultivo
 - Cambiar las rutas para ser mas consistentes
 - Revisar los nombres de variables y rutas
+- Validar que los archivos existon con os.path.exists
+- comprobar que las rutas y cadenas funcionan en python 2 y 3
+-look raw_input por input
 
 """
 
@@ -117,6 +120,7 @@ def recoge_meteo(ruta_geodb_trabajo, mesEntrada, mesSalida):
     if debug:
         print("te vamos a copiar estos datos: {0}".format(periodo))
     for mes in periodo:
+        os.path.exists(ruta_precipitaciones)
         arcpy.env.workspace = ruta_precipitaciones
         if debug:
             print("estoy copiando precipitaciones {mes} ".format(mes=mes))

@@ -8,6 +8,6 @@ update: ## Update the local repo
 	@git pull
 
 al-test: update ## Alvaro, corre esto	
-	& C:/Python27/ArcGISx6410.8/python.exe c:/script/intentando.py
+	C:/Python27/ArcGISx6410.8/python.exe ./intentando.py
 
 

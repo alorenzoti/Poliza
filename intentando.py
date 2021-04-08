@@ -70,11 +70,8 @@ ruta_geodb_trabajo = r"C:\script\workspace\datosInput.gdb"
 
 def limpiar_workspace(workspace):
     if os.path.isdir(workspace):
-        a = (r"C:\script\workspace")
-        shutil.rmtree(a)
-        os.makedirs(r"C:\script\workspace\tablas")
-    else:
-        os.makedirs(r"C:\script\workspace\tablas")
+        shutil.rmtree(workspace)
+    os.makedirs(os.path.join(workspace, r"tablas"))
 
 
 
@@ -293,7 +290,7 @@ def calcular_indice_peligro_parcela(destino_tablas_ruta):
 if __name__ == "__main__":
 
     print("empieza el script")
-    limpiar_workspace()
+    limpiar_workspace(destino_dir)
     inicio, final = pedirentrada()  # pide entrada al usuario
     recoge_meteo(ruta_geodb_trabajo, inicio, final)
 

@@ -114,11 +114,13 @@ def recoge_meteo(ruta_geodb_trabajo, mesEntrada, mesSalida):
     recoge precipitaciones y temperaturas en un periodo dado y las copia a nuestra gdb para cada mes.
     """
     periodo = getperiod(mesEntrada, mesSalida)
+    # TODO: workspace
     if debug:
         print("te vamos a copiar estos datos: {0}".format(periodo))
     for mes in periodo:
         if debug:
             print("estoy copiando precipitaciones {mes} ".format(mes=mes))
+        arcpy.env.workspace = ruta_precipitaciones
         arcpy.management.CopyRaster(
             mes, os.path.join( mes + "Pre"))
 

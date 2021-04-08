@@ -81,7 +81,7 @@ listameses = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio',
 def pedir_mes(msg):
     valid = False
     while not valid:
-        mes = input(msg)
+        mes = raw_input(msg)
         valid = mes in listameses
     return mes
 
@@ -139,7 +139,7 @@ def recoge_meteo(ruta_geodb_trabajo, mesEntrada, mesSalida):
 # ask users INPUT CATASTRO + SELECT:
 # TODO: extract inputs and add validation. eg: "560014A40027"
 def obtener_parcela_usuario():
-    input_catastro = input("introduce el numero de parcela catastral \t")
+    input_catastro = raw_input("introduce el numero de parcela catastral \t")
     return str(input_catastro)
 
 

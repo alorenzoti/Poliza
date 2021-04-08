@@ -134,7 +134,6 @@ geodb_periodo_path = r"C:\script\workspace\datosInput.gdb"
 # extrae de las tablas de att los atributos de capa de el catastro selecionado
 entidadRecorte = arcpy.Select_analysis(
     catastro_capa, geodb_periodo_path, "OBJECTID" + "=" + str(input_catastro))
-#entidadRecorte = arcpy.Select_analysis(catastro_capa,geodb_periodo_path,campo + "= '" + str(numero) + "'")
 
 
 # REALIZAMOS EL CLIP DE CATASTRO CON LOS DATOS CLIMATICOS:

@@ -245,8 +245,6 @@ def obtener_total(medias_peligrosidad):
     total = 1
     for i in medias_peligrosidad:
         total = total+i
-    dividendo = print("dividendo " + str(total))
-    divisor = print("divisor " + str(longitudlista))
     return total
 
 

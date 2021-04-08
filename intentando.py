@@ -2,7 +2,6 @@
 import arcpy
 import os
 import pandas as pd
-from arcpy.management import CopyRaster
 from arcpy.sa import ExtractByMask
 from arcpy.sa import *
 import shutil

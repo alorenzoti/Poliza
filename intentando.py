@@ -299,6 +299,6 @@ def obtener_precio_seguro(indice_peligro_parcela):
         print("el seguro a tercero es 250€")
     else:
         #print("Perdone las molestias, algo ha fallado. Volveremos a calcularlo")
-    fallo = arcpy.SetParameterAsText(6, "Perdone las molestias, algo ha fallado. Volveremos a calcularlo")
+        fallo = arcpy.SetParameterAsText(6, "Perdone las molestias, algo ha fallado. Volveremos a calcularlo")
 
 obtener_precio_seguro(indice_peligro_parcela)

@@ -80,7 +80,7 @@ def recorrer(geodb_periodo_path, mesEntrada, mesSalida):
         if debug:
             print("estoy copiando precipitaciones {mes} ".format(mes=mes))
         arcpy.management.CopyRaster(
-            mes, os.path.join( mes + "Pre"))
+            mes, os.path.join(, mes + "Pre"))
 
         if debug:
             print("estoy copiando temperaturas maximas {mes} ".format(mes=mes))
@@ -160,7 +160,7 @@ recortar(geologia_capa, r"geologia_recorte")
 recortar(pendiente_capa, r"pendiente_recorte")
 
 # RECORTAMOS CAPA DE HIDROLOGÍA:
-recortar(hidrologia_capa, r"hidrologia_recorte")
+    recortar(hidrologia_capa, r"hidrologia_recorte")
 
 
 # CREAMOS UNA NUEVA GDB SOLO CON LAS CAPAS DE RECORTE
@@ -245,7 +245,6 @@ def obtener_total(medias_peligrosidad):
     total = 1
     for i in medias_peligrosidad:
         total = total+i
-        (total)
     dividendo = print("dividendo " + str(total))
     divisor = print("divisor " + str(longitudlista))
     return total

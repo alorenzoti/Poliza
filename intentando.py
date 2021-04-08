@@ -291,7 +291,7 @@ if __name__ == "__main__":
 
     print("empieza el script")
     limpiar_workspace(destino_dir)
-    inicio, final = pedirentrada()  # pide entrada al usuario
+    inicio, final = entrada_periodo_usuario()  # pide entrada al usuario
     recoge_meteo(ruta_geodb_trabajo, inicio, final)
 
     # extrae de las tablas de att los atributos de capa de el catastro selecionado

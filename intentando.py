@@ -80,7 +80,7 @@ def recorrer(geodb_periodo_path, mesEntrada, mesSalida):
         if debug:
             print("estoy copiando precipitaciones {mes} ".format(mes=mes))
         arcpy.management.CopyRaster(
-            mes, os.path.join(, mes + "Pre"))
+            mes, os.path.join( mes + "Pre"))
 
         if debug:
             print("estoy copiando temperaturas maximas {mes} ".format(mes=mes))

@@ -37,7 +37,8 @@ FEATURE REQUESTS
 
 ################################################################################
 # CORE
-from core import limpiar_workspace, pedir_mes, entrada_periodo_usuario
+from poliza_utils import limpiar_workspace, comprobar_rutas
+from core import pedir_mes, entrada_periodo_usuario
 from core import entrada_arcpy, getperiod, recoge_meteo, obtener_parcela_usuario
 from core import obtener_parcela_arcpy, recortar, recortar_clima, guardar_periodo
 from core import guardar_periodo, guardar_periodo, obtener_total

@@ -76,10 +76,7 @@ if __name__ == "__main__":
     recortar(entidadRecorte, hidrologia_capa, r"hidrologia_recorte")
 
     # CREAMOS UNA NUEVA GDB SOLO para LAS CAPAS DE RECORTE
-    #TODO Refartoring.
-    #TODO: falta el workspace. creo que va a ser el de trabajo.
-    # lista_recorte = lista_capas(ruta_gdb_temporal) # Alternativa moderna.
-    lista_recorte = arcpy.ListDatasets("*", "Raster")
+    lista_recorte = lista_capas(ruta_gdb_temporal)
     # Y guardamos las capas selecionadas para el periodo dado en ella
     guardar_periodo(destino_dir, destino_dbname, destino_workspace,
                     lista_recorte, ruta_gdb_temporal)

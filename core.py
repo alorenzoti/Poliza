@@ -58,7 +58,7 @@ def lista_capas(ruta_workspace):
     return capas
 
 
-def recoge_meteo_periodo(ruta_geodb_trabajo, mesEntrada, mesSalida):
+def recoge_meteo_periodo(ruta_gdb_temporal, mesEntrada, mesSalida):
     """
     recoge precipitaciones y temperaturas en un periodo dado y las copia a nuestra gdb para cada mes.
     """
@@ -75,13 +75,13 @@ def recoge_meteo_periodo(ruta_geodb_trabajo, mesEntrada, mesSalida):
             print("estoy copiando temperaturas maximas {mes} ".format(mes=mes))
         arcpy.env.workspace = ruta_temperaturasMax
         arcpy.management.CopyRaster(
-            mes, os.path.join(ruta_geodb_trabajo, mes + "TMax"))
+            mes, os.path.join(ruta_gdb_temporal, mes + "TMax"))
 
         if debug:
             print("estoy copiando temperaturas minimas {mes} ".format(mes=mes))
         arcpy.env.workspace = ruta_temperaturasMin
         arcpy.management.CopyRaster(
-            mes, os.path.join(ruta_geodb_trabajo, mes + "TMin"))
+            mes, os.path.join(ruta_gdb_temporal, mes + "TMin"))
 
 
 
@@ -96,12 +96,12 @@ def obtener_parcela_arcpy():
     return arcpy.GetParameterAsText(2)
 
 
-def obtener_catastro(parcela, ruta_catastro_capa, ruta_geodb_trabajo):
+def obtener_catastro(parcela, ruta_catastro_capa, ruta_gdb_temporal):
     """ Obtener la parcela de la db del catastro. imagino.
     """
     #arcpy.env.workspace=workspace # NOTE: En el original no se usa workspace para esta operacion 
     entidadRecorte = arcpy.Select_analysis(
-        ruta_catastro_capa, ruta_geodb_trabajo, "OBJECTID" + "=" + parcela)
+        ruta_catastro_capa, ruta_gdb_temporal, "OBJECTID" + "=" + parcela)
     return entidadRecorte
 
 
@@ -113,7 +113,7 @@ def recortar(entidadRecorte, lista_capas_gdb, save_path):
     inRaster = capa
     inMaskData = entidadRecorte
     outExtractByMask = ExtractByMask(inRaster, inMaskData)
-    outExtractByMask.save(os.path.join(ruta_geodb_trabajo, save_path))
+    outExtractByMask.save(os.path.join(ruta_gdb_temporal, save_path))
     if debug:
         print("estoy recortando {0}".format(capa))
         print("estoy guardando en {0}".format(save_path))
@@ -127,7 +127,7 @@ def recortar_clima(entidadRecorte, lista_capas_gdb):
 
 def guardar_periodo(destino_dir,
                     destino_dbname, destino_workspace,
-                    lista_recorte, ruta_geodb_trabajo):
+                    lista_recorte, ruta_gdb_temporal):
     """ Guarda el resultado del periodo selecionado
     """
     # Creamos una GDB nueva para el resultado
@@ -136,7 +136,7 @@ def guardar_periodo(destino_dir,
 
     for capa in lista_recorte:
         if "_recorte" in capa:
-            arcpy.env.workspace = ruta_geodb_trabajo
+            arcpy.env.workspace = ruta_gdb_temporal
             if debug:
                 print("{capa}+esta capa es resultado".format(capa=capa))
             arcpy.management.CopyRaster(capa, os.path.join(

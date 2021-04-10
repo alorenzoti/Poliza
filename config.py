@@ -13,7 +13,7 @@ destino_workspace = r"C:\script\workspace\datos_finales.gdb"
 destino_tablas_ruta = r"C:\script\workspace\tablas"
 
 # Rutas:
-ruta_catastro = r"C:\script\catastro\catastrogdb.gdb"
+ruta_db_catastro = r"C:\script\catastro\catastrogdb.gdb"
 ruta_catastro_capa = r"C:\script\catastro\catastrogdb.gdb\Catastro_murcia"
 ruta_precipitaciones = r"C:\script\climatologia\precipitaciones.gdb"
 ruta_temperaturasMax = r"C:\script\climatologia\temperaturasMax.gdb"
@@ -26,4 +26,7 @@ ruta_pendiente = r"C:\script\datosConstantes\pendiente.gdb"
 ruta_pendiente_capa = r"C:\script\datosConstantes\pendiente.gdb\pendiente"
 
 #  Ruta de gdb de trabajo (Temporal)
-ruta_geodb_trabajo = r"C:\script\workspace\datosInput.gdb"
+ruta_gdb_temporal = r"C:\script\workspace\datosInput.gdb"
+
+# Ruta interna para testing
+this_file_exists = r"./config.py"

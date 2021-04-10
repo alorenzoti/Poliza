@@ -58,7 +58,7 @@ def lista_capas(ruta_workspace):
     return capas
 
 
-def recoge_meteo_periodo(ruta_gdb_temporal, mesEntrada, mesSalida):
+def recoge_meteo_periodo(ruta_gdb_temporal, mesEntrada, mesSalida, ruta_temperaturasMax=ruta_temperaturasMax,  ):
     """
     recoge precipitaciones y temperaturas en un periodo dado y las copia a nuestra gdb para cada mes.
     """
@@ -70,7 +70,6 @@ def recoge_meteo_periodo(ruta_gdb_temporal, mesEntrada, mesSalida):
             print("estoy copiando precipitaciones {mes} ".format(mes=mes))
         arcpy.management.CopyRaster(
             mes, os.path.join( mes + "Pre"))
-
         if debug:
             print("estoy copiando temperaturas maximas {mes} ".format(mes=mes))
         arcpy.env.workspace = ruta_temperaturasMax

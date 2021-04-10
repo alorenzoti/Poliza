@@ -1,6 +1,5 @@
 # coding=utf-8
 
-import arcpy #TODO: quitar la ultima llamada a esto desde este script.
 
 """
 Intentando.py

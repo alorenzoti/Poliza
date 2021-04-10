@@ -25,7 +25,7 @@ Notas de desarrollo:
 - Revisar los nombres de variables y rutas
 - Validar que los archivos existon con os.path.exists
 - comprobar que las rutas y cadenas funcionan en python 2 y 3
--look raw_input por input
+- look raw_input por input
 
 """
 

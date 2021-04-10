@@ -96,8 +96,10 @@ def obtener_parcela_arcpy():
     return arcpy.GetParameterAsText(2)
 
 
-def obtener_catastro(workspace, parcela, ruta_catastro_capa, ruta_geodb_trabajo):
-    arcpy.env.workspace=workspace
+def obtener_catastro(parcela, ruta_catastro_capa, ruta_geodb_trabajo):
+    """ Obtener la parcela de la db del catastro. imagino.
+    """
+    #arcpy.env.workspace=workspace # NOTE: En el original no se usa workspace para esta operacion 
     entidadRecorte = arcpy.Select_analysis(
         ruta_catastro_capa, ruta_geodb_trabajo, "OBJECTID" + "=" + parcela)
     return entidadRecorte

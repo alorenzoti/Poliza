@@ -1,13 +1,17 @@
 
 
+import os
+import pandas as pd
+from arcpy.sa import ExtractByMask
+from arcpy.sa import * #TODO: quitar esta puta mierda de import
 
-def limpiar_workspace(workspace):
-    if os.path.isdir(workspace):
-        a = (r"C:\script\workspace")
-        shutil.rmtree(a)
-        os.makedirs(r"C:\script\workspace\tablas")
-    else:
-        os.makedirs(r"C:\script\workspace\tablas")
+from config import *
+from utils import comprobar_rutas, 
+
+# Configuraciones internas
+arcpy.env.overwriteOutput = True
+debug = True
+
 
 
 
@@ -45,7 +49,16 @@ def getperiod(inicio, final):
 assert len(getperiod("enero", "febrero")) == 2
 
 
-def recoge_meteo(ruta_geodb_trabajo, mesEntrada, mesSalida):
+def lista_capas(ruta_workspace):
+    """
+    lista todas las capas en un arcpy workspace
+    """
+    arcpy.env.workspace = ruta_workspace
+    capas = arcpy.ListDatasets("*", "Raster")
+    return capas
+
+
+def recoge_meteo_periodo(ruta_geodb_trabajo, mesEntrada, mesSalida):
     """
     recoge precipitaciones y temperaturas en un periodo dado y las copia a nuestra gdb para cada mes.
     """
@@ -83,6 +96,12 @@ def obtener_parcela_arcpy():
     return arcpy.GetParameterAsText(2)
 
 
+def obtener_catastro(workspace, parcela, ruta_catastro_capa, ruta_geodb_trabajo):
+    arcpy.env.workspace=workspace
+    entidadRecorte = arcpy.Select_analysis(
+        ruta_catastro_capa, ruta_geodb_trabajo, "OBJECTID" + "=" + parcela)
+    return entidadRecorte
+
 
 def recortar(entidadRecorte, lista_capas_gdb, save_path):
     """ Recorta capas en funcion de la entidad de recorte.
@@ -102,43 +121,6 @@ def recortar_clima(entidadRecorte, lista_capas_gdb):
     for capa in lista_capas_gdb:
         recortar(entidadRecorte, capa, capa + "_recorte")
 
-
-def guardar_periodo(destino_dir,
-                    destino_dbname, destino_workspace,
-                    lista_recorte, ruta_geodb_trabajo):
-    """ Guarda el resultado del periodo selecionado
-    """
-    # Creamos una GDB nueva para el resultado
-    arcpy.CreateFileGDB_management(destino_dir, destino_dbname)
-    arcpy.env.workspace = destino_workspace
-
-    for capa in lista_recorte:
-        if "_recorte" in capa:
-            arcpy.env.workspace = ruta_geodb_trabajo
-            if debug:
-                print("{capa}+esta capa es resultado".format(capa=capa))
-            arcpy.management.CopyRaster(capa, os.path.join(
-                destino_workspace, capa + '_def'))
-
-
-
-
-def guardar_periodo(destino_dir,
-                    destino_dbname, destino_workspace,
-                    lista_recorte, ruta_geodb_trabajo):
-    """ Guarda el resultado del periodo selecionado
-    """
-    # Creamos una GDB nueva para el resultado
-    arcpy.CreateFileGDB_management(destino_dir, destino_dbname)
-    arcpy.env.workspace = destino_workspace
-
-    for capa in lista_recorte:
-        if "_recorte" in capa:
-            arcpy.env.workspace = ruta_geodb_trabajo
-            if debug:
-                print("{capa}+esta capa es resultado".format(capa=capa))
-            arcpy.management.CopyRaster(capa, os.path.join(
-                destino_workspace, capa + '_def'))
 
 
 def guardar_periodo(destino_dir,
@@ -212,5 +194,5 @@ def calcular_indice_peligro_parcela(destino_tablas_ruta):
     total_peligro = obtener_total(medias_peligrosidad)
     indice_peligro_parcela = total_peligro/longitudlista
     if debug:
-    print("el indice de peligro de la puta parcela es {0}".format(indice_peligro_parcela))
+        print("el indice de peligro de la puta parcela es {0}".format(indice_peligro_parcela))
     return indice_peligro_parcela

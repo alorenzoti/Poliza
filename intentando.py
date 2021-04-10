@@ -35,7 +35,7 @@ FEATURE REQUESTS
 
 """
 
-################################################################################
+####################################################gst############################
 # CORE
 from poliza_utils import limpiar_workspace, comprobar_rutas
 from core import pedir_mes, entrada_periodo_usuario
